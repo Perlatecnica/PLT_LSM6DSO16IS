@@ -47,14 +47,6 @@ public:
         INTERFACE_SPI
     };
 
-/*
-    static LSM6DSO16IS& getInstance(InterfaceType type) {
-        static LSM6DSO16IS instanceI2C(I2C_SDA, I2C_SCL);
-        static LSM6DSO16IS instanceSPI(SPI_MOSI, SPI_MISO, SPI_SCK, SPI_CS);
-        return (type == INTERFACE_I2C) ? instanceI2C : instanceSPI;
-    }
-*/
-
     void initialize();
     void readSensorData();
     LSM6DSO16ISStatusTypeDef begin(void);
@@ -106,7 +98,12 @@ private:
     SPI* spi;
     DigitalOut* cs_pin;
 
-    uint8_t lsm6ds01tis_8bit_address = (0x6A << 1); // 8 bits device address
+    #ifdef IKS4A1
+        uint8_t lsm6ds01tis_8bit_address = (0x6A << 1); // 8 bits device address
+    #else // DEFAULT ADDRESS
+        uint8_t lsm6ds01tis_8bit_address = (0x6A << 1); // 8 bits device address
+    #endif
+
     float X_Last_ODR;
     float G_Last_ODR;
     uint8_t X_isEnabled;
